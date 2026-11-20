@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: valueconvert
+    runtime: node
+    plan: free
+    autoDeploy: true
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      # Sans ceci, npm ci n'installe pas vite/typescript (NODE_ENV=production) et le build échoue.
+      - key: NPM_CONFIG_INCLUDE
+        value: dev
+      - key: APP_ENV
+        value: mainnet
+      - key: PI_SANDBOX
+        value: "0"
+      - key: PI_VALUE_AVAILABLE
+        value: "0"
+      # Clé de validation du domaine (portail Pi, app Mainnet) : à saisir dans Render, jamais dans le dépôt.
+      - key: PI_VALIDATION_KEY
+        sync: false
+      - key: COINGECKO_API_KEY
+        sync: false
+      # Clé API de CETTE application Mainnet (Developer Portal) : à saisir dans Render uniquement.
+      - key: PI_API_KEY
+        sync: false
+      # Pass payant : fermé tant que PASS_ENABLED=0.
+      - key: PASS_ENABLED
+        value: "0"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
